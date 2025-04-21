@@ -10,3 +10,12 @@
 *.lai
 *.la
 *.a
+
+# binary program
+test
+client
+server
+simple/dtls_client
+simple/dtls_server
+simple/tls_server
+simple/tls_client

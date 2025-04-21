@@ -8,12 +8,12 @@
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 
-#define SSL_CLIENT_RSA_CERT	"/home/nmathew/cacert/ssl_client.crt"
-#define SSL_CLIENT_RSA_KEY	"/home/nmathew/cacert/ssl_client.key"
-#define SSL_CLIENT_RSA_CA_CERT	"/home/nmathew/cacert/ca.crt"
-#define SSL_CLIENT_RSA_CA_PATH	"/home/nmathew/cacert/"
+#define SSL_CLIENT_RSA_CERT	"./cert/client-cert.pem"
+#define SSL_CLIENT_RSA_KEY	"./cert/client-key.pem"
+#define SSL_CLIENT_RSA_CA_CERT	"./cert/ca-cert.pem"
+#define SSL_CLIENT_RSA_CA_PATH	"./cert/"
 
-#define SSL_SERVER_ADDR		"/home/nmathew/ssl_server"
+#define SSL_SERVER_ADDR		"/Users/jacklau/Documents/workspace/github/SSL-TLS-clientserver/test"
 
 #define OFF	0
 #define ON	1
@@ -32,7 +32,8 @@ int main(void)
 
 	SSL_library_init();
 	SSL_load_error_strings();
-	client_meth = SSLv3_client_method();
+	// client_meth = SSLv3_client_method();
+	client_meth = TLS_client_method();
 	ssl_client_ctx = SSL_CTX_new(client_meth);
 	
 	if(!ssl_client_ctx)
@@ -80,8 +81,8 @@ int main(void)
 	}
 	memset(&serveraddr, 0, sizeof(struct sockaddr_un));
 	serveraddr.sun_family = AF_UNIX;
-	serveraddr.sun_path[0] = 0;
-	strncpy(&(serveraddr.sun_path[1]), SSL_SERVER_ADDR, strlen(SSL_SERVER_ADDR) + 1);
+	// serveraddr.sun_path[0] = 0;
+	strncpy(&(serveraddr.sun_path), SSL_SERVER_ADDR, sizeof(SSL_SERVER_ADDR) - 1);
 	
 	connect(clientsocketfd, (struct sockaddr *)&serveraddr, sizeof(struct sockaddr_un));
 		

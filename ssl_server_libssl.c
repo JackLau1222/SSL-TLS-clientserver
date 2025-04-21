@@ -8,12 +8,12 @@
 #include <openssl/ssl.h>
 #include <openssl/err.h>
 
-#define SSL_SERVER_RSA_CERT	"/home/nmathew/cacert/ssl_server.crt"
-#define SSL_SERVER_RSA_KEY	"/home/nmathew/cacert/ssl_server.key"
-#define SSL_SERVER_RSA_CA_CERT	"/home/nmathew/cacert/ca.crt"
-#define SSL_SERVER_RSA_CA_PATH	"/home/nmathew/cacert/"
+#define SSL_SERVER_RSA_CERT	"./cert/server-cert.pem"
+#define SSL_SERVER_RSA_KEY	"./cert/server-key.pem"
+#define SSL_SERVER_RSA_CA_CERT	"./cert/ca-cert.pem"
+#define SSL_SERVER_RSA_CA_PATH	"./cert/"
 
-#define SSL_SERVER_ADDR		"/home/nmathew/ssl_server"
+#define SSL_SERVER_ADDR		"/Users/jacklau/Documents/workspace/github/SSL-TLS-clientserver/test"
 
 #define OFF	0
 #define ON	1
@@ -30,7 +30,8 @@ int main(void)
 
 	SSL_library_init();
 	SSL_load_error_strings();
-	server_meth = SSLv3_server_method();
+	//server_meth = SSLv3_server_method();
+	server_meth = TLS_server_method();
 	ssl_server_ctx = SSL_CTX_new(server_meth);
 	
 	if(!ssl_server_ctx)
@@ -75,13 +76,22 @@ int main(void)
 		printf("Error on socket creation\n");
 		return -1;
 	}
+	unlink(SSL_SERVER_ADDR);
+
 	memset(&serveraddr, 0, sizeof(struct sockaddr_un));
 	serveraddr.sun_family = AF_UNIX;
-	serveraddr.sun_path[0] = 0;
-	strncpy(&(serveraddr.sun_path[1]), SSL_SERVER_ADDR, strlen(SSL_SERVER_ADDR) + 1);
-	if(bind(serversocketfd, (struct sockaddr *)&serveraddr, sizeof(struct sockaddr_un)))
+	//serveraddr.sun_path[0] = 0;
+	strncpy(&(serveraddr.sun_path), SSL_SERVER_ADDR, sizeof(serveraddr.sun_path) - 1);
+	// 3) Bind: the kernel will *create* the socket file for you
+	socklen_t len = offsetof(struct sockaddr_un, sun_path)
+				+ strlen(serveraddr.sun_path) + 1;
+	// if(bind(serversocketfd, (struct sockaddr *)&serveraddr, sizeof(struct sockaddr_un)))
+	if (bind(serversocketfd,
+         (struct sockaddr *)&serveraddr,
+         len) < 0)
 	{
-		printf("server bind error\n");
+		perror("bind");
+		//printf("server bind error\n");
 		return -1;
 	}
 	
