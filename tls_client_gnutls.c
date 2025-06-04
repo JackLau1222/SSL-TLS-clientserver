@@ -26,6 +26,7 @@ int main(void)
     gnutls_session_t session;
 
     gnutls_global_init();
+    gnutls_global_set_log_level(2); // increase for more detail
 
     gnutls_certificate_allocate_credentials(&xcred);
     gnutls_certificate_set_x509_trust_file(xcred, CA_CERT_FILE, GNUTLS_X509_FMT_PEM);
