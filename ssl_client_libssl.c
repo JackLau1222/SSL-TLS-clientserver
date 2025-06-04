@@ -13,7 +13,7 @@
 #define SSL_CLIENT_RSA_CA_CERT	"./cert/ca-cert.pem"
 #define SSL_CLIENT_RSA_CA_PATH	"./cert/"
 
-#define SSL_SERVER_ADDR		"/Users/jacklau/Documents/workspace/github/SSL-TLS-clientserver/test"
+#define SSL_SERVER_ADDR		"/Users/jacklau/Documents/Programs/Git/Github/SSL-TLS-clientserver/test"
 
 #define OFF	0
 #define ON	1

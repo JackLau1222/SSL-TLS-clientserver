@@ -19,3 +19,7 @@ simple/dtls_client
 simple/dtls_server
 simple/tls_server
 simple/tls_client
+
+*.dSYM
+demo/key_string
+demo/tls_demo

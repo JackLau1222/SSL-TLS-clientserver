@@ -13,10 +13,15 @@
 #define SSL_SERVER_RSA_CA_CERT	"./cert/ca-cert.pem"
 #define SSL_SERVER_RSA_CA_PATH	"./cert/"
 
-#define SSL_SERVER_ADDR		"/Users/jacklau/Documents/workspace/github/SSL-TLS-clientserver/test"
+#define SSL_SERVER_ADDR		"/Users/jacklau/Documents/Programs/Git/Github/SSL-TLS-clientserver/test"
 
 #define OFF	0
 #define ON	1
+
+static void openssl_dtls_on_info(const SSL *dtls, int where, int r0)
+{
+	printf("DTLS info method=empty state=%s(%s)\n", SSL_state_string(dtls), SSL_state_string_long(dtls));
+}
 
 int main(void)
 {
@@ -110,6 +115,9 @@ int main(void)
 	
 		clientsocketfd = accept(serversocketfd, NULL, 0);
 		serverssl = SSL_new(ssl_server_ctx);
+
+		SSL_set_ex_data(serverssl, 0, ssl_server_ctx);
+		SSL_set_info_callback(serverssl, openssl_dtls_on_info);
 		if(!serverssl)
 		{
 			printf("Error SSL_new\n");

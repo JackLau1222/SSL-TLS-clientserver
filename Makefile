@@ -1,6 +1,6 @@
 LIBS        = -lssl -lcrypto -pthread -lm -ldl
-INCLUDES   = -I/opt/homebrew/Cellar/openssl@3/3.4.1/include
-LFLAGS	    = -L/opt/homebrew/Cellar/openssl@3/3.4.1/lib
+# INCLUDES   = -I/opt/homebrew/Cellar/openssl@3/3.4.1/include
+# LFLAGS	    = -L/opt/homebrew/Cellar/openssl@3/3.4.1/lib
 
 libssl:
 	gcc $(INCLUDES) -o server ssl_server_libssl.c $(LFLAGS) $(LIBS)
